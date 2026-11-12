@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111111">
+    <meta name="description" content="Explore Formula 1: its history, champions, teams, technology and unforgettable Grand Prix moments.">
+    <title>Formula 1 — The World at Full Throttle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
+    <style>
+        :root {
+            --f1-red: #e10600;
+            --f1-silver: #c7c9cc;
+            --dark: #111111;
+            --muted: #a4a4a4;
+            --cream: #eceeef;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 82px;
+        }
+
+        .reading-progress {
+            background: var(--f1-red);
+            height: 3px;
+            inset: 0 auto auto 0;
+            position: fixed;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .08s linear;
+            width: 100%;
+            z-index: 1100;
+        }
+
+        body {
+            background: var(--dark);
+            color: #fff;
+            font-family: "DM Sans", sans-serif;
+        }
+
+        .display-font,
+        h1,
+        h2,
+        h3,
+        .nav-link,
+        .stat-number,
+        .year {
+            font-family: "Oswald", sans-serif;
+            text-transform: uppercase;
+        }
+
+        .site-nav {
+            background: rgba(15, 15, 15, .95);
+            border-bottom: 1px solid rgba(255, 255, 255, .09);
+            backdrop-filter: blur(12px);
+        }
+
+        .brand-mark {
+            color: #fff;
+            font-family: "Oswald", sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: .12em;
+            line-height: 1;
+        }
+
+        .brand-mark span {
+            color: var(--f1-red);
+        }
+
+        .nav-link {
+            color: #d7d7d7;
+            font-size: .82rem;
+            letter-spacing: .1em;
+            padding: .65rem 1rem !important;
+            transition: color .2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link:focus {
+            color: #fff;
+        }
+
+        .nav-cta,
+        .button-f1 {
+            background: var(--f1-red);
+            border: 1px solid var(--f1-red);
+            color: #fff;
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .11em;
+            padding: .85rem 1.2rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: background .2s ease, border-color .2s ease;
+        }
+
+        .nav-cta:hover,
+        .button-f1:hover {
+            background: #b90000;
+            border-color: #b90000;
+            color: #fff;
+        }
+
+        .hero {
+            align-items: center;
+            background: #080909;
+            display: flex;
+            min-height: min(760px, 92vh);
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            background:
+                linear-gradient(90deg, rgba(10, 10, 10, .94) 0%, rgba(10, 10, 10, .76) 42%, rgba(10, 10, 10, .08) 100%),
+                linear-gradient(0deg, rgba(10, 10, 10, .8), transparent 38%);
+            content: "";
+            inset: 0;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .hero-slide {
+            height: 100%;
+            inset: 0;
+            object-fit: cover;
+            object-position: center 48%;
+            opacity: 0;
+            position: absolute;
+            transition: opacity .9s ease;
+            width: 100%;
+            z-index: -2;
+        }
+
+        .hero-slide.is-active {
+            opacity: 1;
+        }
+
+        .hero::after {
+            background: var(--f1-red);
+            bottom: 0;
+            content: "";
+            height: 5px;
+            left: 0;
+            position: absolute;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            animation: rise-in .9s .15s both;
+        }
+
+        @keyframes rise-in {
+            from { opacity: 0; transform: translateY(28px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-content {
+            max-width: 700px;
+            padding-bottom: 3rem;
+            padding-top: 7rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            align-items: center;
+            color: var(--f1-silver);
+            display: inline-flex;
+            font-size: .73rem;
+            font-weight: 700;
+            gap: .7rem;
+            letter-spacing: .23em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            background: var(--f1-red);
+            content: "";
+            height: 2px;
+            width: 28px;
+        }
+
+        .hero h1 {
+            font-size: clamp(4rem, 11vw, 8.5rem);
+            font-weight: 700;
+            letter-spacing: -.035em;
+            line-height: .87;
+            margin: 1.5rem 0;
+        }
+
+        .hero h1 span {
+            color: var(--f1-red);
+            display: block;
+        }
+
+        .hero-copy {
+            color: #d1d1d1;
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            line-height: 1.75;
+            margin-bottom: 2rem;
+            max-width: 460px;
+        }
+
+        .text-link {
+            color: #fff;
+            font-size: .8rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .text-link span {
+            color: var(--f1-red);
+            font-size: 1.15rem;
+            margin-left: .4rem;
+        }
+
+        .hero-caption {
+            bottom: 2rem;
+            color: rgba(255, 255, 255, .72);
+            font-size: .66rem;
+            letter-spacing: .15em;
+            position: absolute;
+            right: max(1.5rem, calc((100vw - 1140px) / 2));
+            text-transform: uppercase;
+        }
+
+        .hero-caption a {
+            color: inherit;
+            display: block;
+            font-size: .58rem;
+            margin-top: .35rem;
+        }
+
+        .hero-controls {
+            align-items: center;
+            bottom: 1.7rem;
+            display: flex;
+            justify-content: center;
+            left: 50%;
+            position: absolute;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .hero-slide-indicators {
+            align-items: center;
+            display: flex;
+            gap: .55rem;
+        }
+
+        .hero-slide-indicators button {
+            background: rgba(255, 255, 255, .65);
+            border: 0;
+            border-radius: 50%;
+            height: .55rem;
+            padding: 0;
+            transition: background .2s ease, transform .2s ease;
+            width: .55rem;
+        }
+
+        .hero-slide-indicators button.is-active {
+            background: #fff;
+            transform: scale(1.25);
+        }
+
+        .stats-strip {
+            background: #181818;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .stat-item {
+            border-right: 1px solid rgba(255, 255, 255, .11);
+            padding: 1.8rem 1rem;
+        }
+
+        .stat-item:last-child {
+            border-right: 0;
+        }
+
+        .stat-number {
+            color: #fff;
+            font-size: clamp(2.1rem, 4vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: .68rem;
+            letter-spacing: .14em;
+            margin-top: .55rem;
+            text-transform: uppercase;
+        }
+
+        .section-pad {
+            padding: 7rem 0;
+        }
+
+        .section-heading {
+            max-width: 720px;
+        }
+
+        .section-heading .section-copy {
+            max-width: 640px;
+        }
+
+        .reveal {
+            opacity: 1;
+            transform: none;
+        }
+
+        .js .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1);
+        }
+
+        .js .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: .08s !important; }
+        .reveal-delay-2 { transition-delay: .16s !important; }
+        .reveal-delay-3 { transition-delay: .24s !important; }
+
+        .section-kicker {
+            color: var(--f1-red);
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-size: clamp(2.7rem, 6vw, 5rem);
+            font-weight: 600;
+            letter-spacing: -.025em;
+            line-height: .98;
+            margin: .8rem 0 1.3rem;
+        }
+
+        .section-copy {
+            color: #aaa;
+            line-height: 1.85;
+            max-width: 490px;
+        }
+
+        .heritage {
+            background: var(--cream);
+            color: var(--dark);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .heritage .section-copy {
+            color: #555;
+        }
+
+        .heritage-image {
+            min-height: 420px;
+            position: relative;
+        }
+
+        .heritage-image img {
+            height: 100%;
+            inset: 0;
+            object-fit: cover;
+            position: absolute;
+            width: 100%;
+        }
+
+        .heritage-image::after {
+            background: linear-gradient(0deg, rgba(10, 10, 10, .6), transparent 55%);
+            content: "";
+            inset: 0;
+            position: absolute;
+        }
+
+        .image-note {
+            bottom: 1.4rem;
+            color: #fff;
+            font-size: .68rem;
+            letter-spacing: .13em;
+            position: absolute;
+            right: 1.5rem;
+            text-transform: uppercase;
+            z-index: 1;
+        }
+
+        .timeline {
+            border-left: 1px solid #d5d0c8;
+            margin-top: 2.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .timeline-item {
+            padding: 0 0 1.4rem;
+            position: relative;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            background: var(--f1-red);
+            border: 3px solid var(--cream);
+            border-radius: 50%;
+            content: "";
+            height: 12px;
+            left: -1.92rem;
+            position: absolute;
+            top: .22rem;
+            width: 12px;
+        }
+
+        .timeline-year {
+            color: var(--f1-red);
+            font-family: "Oswald", sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .timeline-item p {
+            color: #555;
+            font-size: .9rem;
+            line-height: 1.6;
+            margin: .25rem 0 0;
+        }
+
+        .timeline-item strong {
+            color: #242424;
+        }
+
+        .legacy {
+            background: #111;
+        }
+
+        .legacy-intro {
+            margin-bottom: 3rem;
+        }
+
+        .legacy-card {
+            border-top: 2px solid #393939;
+            height: 100%;
+            padding: 1.5rem 1.2rem 1rem 0;
+            transition: border-color .2s ease, transform .2s ease;
+        }
+
+        .legacy-card:hover {
+            border-color: var(--f1-red);
+            transform: translateY(-4px);
+        }
+
+        .legacy-card .year {
+            color: var(--f1-red);
+            font-size: 2.7rem;
+            font-weight: 600;
+        }
+
+        .legacy-card h3 {
+            font-size: 1.35rem;
+            letter-spacing: .02em;
+            margin: 1.2rem 0 .7rem;
+        }
+
+        .legacy-card p {
+            color: #999;
+            font-size: .9rem;
+            line-height: 1.75;
+            margin: 0;
+        }
+
+        .championships {
+            background: linear-gradient(135deg, #1a1d1d, #101111 68%);
+            border: 1px solid rgba(255, 255, 255, .09);
+            margin-top: 4rem;
+            padding: clamp(1.5rem, 4vw, 3rem);
+        }
+
+        .championships h3,
+        .wins-heading {
+            font-size: 1.5rem;
+            margin: 0 0 1.4rem;
+        }
+
+        .title-ledger {
+            display: grid;
+            gap: 1.4rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .title-ledger-block {
+            border-left: 2px solid var(--f1-red);
+            padding-left: 1rem;
+        }
+
+        .title-ledger-block strong {
+            color: #fff;
+            display: block;
+            font-size: .75rem;
+            letter-spacing: .12em;
+            margin-bottom: .65rem;
+            text-transform: uppercase;
+        }
+
+        .title-years {
+            color: var(--f1-red);
+            font-family: "Oswald", sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: .05em;
+            line-height: 1.8;
+        }
+
+        .title-ledger-block p {
+            color: #999;
+            font-size: .82rem;
+            line-height: 1.6;
+            margin: .35rem 0 0;
+        }
+
+        .wins-section {
+            margin-top: 4.5rem;
+        }
+
+        .win-card {
+            background: #191b1b;
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 2px;
+            height: 100%;
+            overflow: hidden;
+            padding: 1.5rem;
+            position: relative;
+            transition: border-color .25s ease, transform .25s ease, background .25s ease;
+        }
+
+        .win-card::before {
+            background: var(--f1-red);
+            content: "";
+            height: 2px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .35s ease;
+            width: 100%;
+        }
+
+        .win-card:hover {
+            background: #202424;
+            border-color: rgba(0, 210, 190, .45);
+            transform: translateY(-6px);
+        }
+
+        .win-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .win-year {
+            color: var(--f1-red);
+            font-family: "Oswald", sans-serif;
+            font-size: 2rem;
+        }
+
+        .win-card h4 {
+            font-family: "Oswald", sans-serif;
+            font-size: 1.15rem;
+            margin: .7rem 0;
+            text-transform: uppercase;
+        }
+
+        .win-card p {
+            color: #aaa;
+            font-size: .88rem;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .record-note {
+            color: #888;
+            font-size: .75rem;
+            line-height: 1.6;
+            margin-top: 1.25rem;
+        }
+
+        .record-note a {
+            color: var(--f1-silver);
+        }
+
+        .quote-panel {
+            background:
+                linear-gradient(90deg, rgba(15, 15, 15, .95), rgba(15, 15, 15, .7)),
+                url("https://upload.wikimedia.org/wikipedia/commons/3/3a/FIA_F1_Austria_2018_race_scene_3.jpg") center 55% / cover;
+            border-left: 4px solid var(--f1-red);
+            margin-top: 5rem;
+            padding: clamp(2rem, 6vw, 4.5rem);
+        }
+
+        .quote-panel blockquote {
+            font-family: "Oswald", sans-serif;
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            line-height: 1.15;
+            margin: 0;
+            max-width: 820px;
+            text-transform: uppercase;
+        }
+
+        .quote-panel cite {
+            color: #aaa;
+            display: block;
+            font-family: "DM Sans", sans-serif;
+            font-size: .72rem;
+            font-style: normal;
+            letter-spacing: .16em;
+            margin-top: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .drivers {
+            background: #181818;
+        }
+
+        .driver-card {
+            background: #111;
+            border: 1px solid rgba(255, 255, 255, .1);
+            height: 100%;
+        }
+
+        .driver-card img {
+            display: block;
+            height: 290px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .driver-card figure {
+            margin: 0;
+        }
+
+        .image-credit {
+            background: #0b0b0b;
+            color: #aaa;
+            font-size: .68rem;
+            padding: .6rem 1rem;
+        }
+
+        .image-credit a {
+            color: var(--f1-silver);
+        }
+
+        .driver-card-content {
+            padding: 1.5rem;
+        }
+
+        .driver-number {
+            color: var(--f1-red);
+            font-family: "Oswald", sans-serif;
+            font-size: 1rem;
+            letter-spacing: .12em;
+        }
+
+        .driver-card h3 {
+            font-size: 1.8rem;
+            margin: .35rem 0 .7rem;
+        }
+
+        .driver-card p {
+            color: #aaa;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        footer {
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255, 255, 255, .1);
+            color: #888;
+            font-size: .75rem;
+            letter-spacing: .06em;
+            padding: 1.5rem 0;
+        }
+
+        footer a {
+            color: #ddd;
+            text-decoration: none;
+        }
+
+        @media (max-width: 767.98px) {
+            .hero {
+                min-height: 740px;
+            }
+
+            .hero-slide {
+                object-position: 58% center;
+            }
+
+            .hero-content {
+                padding-top: 6rem;
+            }
+
+            .hero-caption {
+                bottom: 1.4rem;
+                left: 1.5rem;
+                right: auto;
+            }
+
+            .hero-controls {
+                bottom: 1rem;
+            }
+
+            .stat-item {
+                border-bottom: 1px solid rgba(255, 255, 255, .11);
+                border-right: 0;
+                padding: 1.3rem .5rem;
+            }
+
+            .stat-item:nth-last-child(-n+2) {
+                border-bottom: 0;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .section-pad {
+                padding: 5rem 0;
+            }
+
+            .heritage-image {
+                min-height: 300px;
+            }
+
+            .title-ledger {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-caption {
+                max-width: 80%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+
+            .js .reveal {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reading-progress" aria-hidden="true"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark site-nav fixed-top" aria-label="Main navigation">
+        <div class="container">
+            <a class="navbar-brand brand-mark" href="#home" aria-label="Formula 1 home"><span>F1</span> / THE GRID</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation"
+                aria-controls="mainNavigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNavigation">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="#heritage">The history</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#drivers">The champions</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#legacy">Records &amp; races</a></li>
+                    <li class="nav-item ms-lg-3"><a class="nav-cta d-inline-block mt-2 mt-lg-0" href="#legacy">Explore F1</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <header class="hero" id="home">
+            <img class="hero-slide is-active" src="image/download%20%288%29.jpg" alt="" aria-hidden="true">
+            <img class="hero-slide" src="image/download%20%2810%29.jpg" alt="" aria-hidden="true">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="eyebrow">The world championship · Since 1950</span>
+                    <h1>One sport.<br>Countless <span>stories.</span></h1>
+                    <p class="hero-copy">Twenty-two drivers. Eleven teams. A global championship where speed, strategy and split-second decisions shape every season.</p>
+                    <a class="button-f1 d-inline-block" href="#heritage">Explore our history <span aria-hidden="true">↗</span></a>
+                </div>
+            </div>
+            <div class="hero-caption">
+                <span id="hero-slide-caption" aria-live="polite">Ferrari · 2024 season</span>
+            </div>
+            <div class="hero-controls" role="group" aria-label="Hero slideshow controls">
+                <div class="hero-slide-indicators" role="group" aria-label="Choose a hero image">
+                    <button type="button" class="hero-indicator is-active" aria-label="Show image 1" aria-current="true"></button>
+                    <button type="button" class="hero-indicator" aria-label="Show image 2"></button>
+                </div>
+            </div>
+        </header>
+
+        <section class="stats-strip" aria-label="Formula 1 facts and records">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-6 col-md-3 stat-item reveal">
+                        <div class="stat-number">1950</div>
+                        <div class="stat-label">First world championship</div>
+                    </div>
+                    <div class="col-6 col-md-3 stat-item reveal reveal-delay-1">
+                        <div class="stat-number count-up" data-count="7">7</div>
+                        <div class="stat-label">Record drivers' titles · Hamilton &amp; Schumacher</div>
+                    </div>
+                    <div class="col-6 col-md-3 stat-item reveal reveal-delay-2">
+                        <div class="stat-number count-up" data-count="105">105</div>
+                        <div class="stat-label">Grand Prix wins · Hamilton record</div>
+                    </div>
+                    <div class="col-6 col-md-3 stat-item reveal reveal-delay-3">
+                        <div class="stat-number count-up" data-count="23">23</div>
+                        <div class="stat-label">Grand Prix weekends · 2026 calendar</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="heritage section-pad" id="heritage">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-5 reveal">
+                        <span class="section-kicker">A world in motion</span>
+                        <h2 class="section-title">Since<br>1950.</h2>
+                        <p class="section-copy">Since the first FIA Formula One World Championship in 1950, the sport has evolved from daring post-war Grand Prix racing into a global contest of drivers, constructors and ever-advancing technology.</p>
+                        <div class="timeline reveal" aria-label="Formula 1 history highlights">
+                            <div class="timeline-item reveal">
+                                <span class="timeline-year">1950</span>
+                                <p>The first World Championship race is held at Silverstone. Giuseppe Farina becomes the inaugural Drivers' Champion.</p>
+                            </div>
+                            <div class="timeline-item reveal reveal-delay-1">
+                                <span class="timeline-year">1958</span>
+                                <p>The Constructors' Championship is introduced. Vanwall wins the first title; Mike Hawthorn takes the Drivers' crown.</p>
+                            </div>
+                            <div class="timeline-item reveal reveal-delay-2">
+                                <span class="timeline-year">1970s</span>
+                                <p>New safety standards and aerodynamic ideas transform the cars and circuits—and keep reshaping the sport.</p>
+                            </div>
+                            <div class="timeline-item reveal">
+                                <span class="timeline-year">2008</span>
+                                <p>Singapore hosts Formula 1's first night race, adding a spectacular new setting to the calendar.</p>
+                            </div>
+                            <div class="timeline-item reveal reveal-delay-1">
+                                <span class="timeline-year">2014</span>
+                                <p>The V6 turbo-hybrid era begins, putting energy recovery and efficiency at the heart of power-unit performance.</p>
+                            </div>
+                            <div class="timeline-item reveal reveal-delay-2">
+                                <span class="timeline-year">2022</span>
+                                <p>Ground-effect aerodynamics return, with new car designs intended to help drivers race more closely.</p>
+                            </div>
+                            <div class="timeline-item reveal reveal-delay-3">
+                                <span class="timeline-year">2026</span>
+                                <p>A new generation of cars and power units ushers in another major technical chapter for Formula 1.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="heritage-image">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/FIA_F1_Austria_2018_race_scene_3.jpg" alt="Formula 1 cars battle through a corner at the 2018 Austrian Grand Prix" loading="lazy">
+                            <span class="image-note">The midfield battle · 2018 Austrian Grand Prix · <a href="https://commons.wikimedia.org/wiki/File:FIA_F1_Austria_2018_race_scene_3.jpg">Lukas Raich / Wikimedia Commons · CC BY-SA 4.0</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="drivers section-pad" id="drivers">
+            <div class="container">
+                <div class="legacy-intro row align-items-end">
+                    <div class="col-lg-7">
+                        <span class="section-kicker">Championship icons</span>
+                        <h2 class="section-title">Two legends.<br>Seven titles each.</h2>
+                    </div>
+                    <div class="col-lg-5">
+                        <p class="section-copy mb-0">Lewis Hamilton and Michael Schumacher share the record for the most Formula 1 Drivers' World Championships. Their careers span different eras, teams and generations of racing.</p>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6 reveal">
+                        <article class="driver-card">
+                            <figure>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Lewis_Hamilton_2014_Singapore_Race%28L02%29.jpg" alt="Lewis Hamilton racing in the 2014 Singapore Grand Prix" loading="lazy">
+                                <figcaption class="image-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Lewis_Hamilton_2014_Singapore_Race(L02).jpg">Morio / Wikimedia Commons</a> · CC BY-SA 4.0</figcaption>
+                            </figure>
+                            <div class="driver-card-content">
+                                <span class="driver-number">7 WORLD TITLES · GREAT BRITAIN</span>
+                                <h3>Lewis Hamilton</h3>
+                                <p>Champion with McLaren in 2008 and with Mercedes from 2014 to 2020, Hamilton shares the record of seven Drivers' titles. His 105 Grand Prix victories are the most in Formula 1 history.</p>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col-md-6 reveal reveal-delay-1">
+                        <article class="driver-card">
+                            <figure>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Michael_Schumacher_2006_Brazil_after_the_end_of_race.jpg" alt="Michael Schumacher after the 2006 Brazilian Grand Prix" loading="lazy">
+                                <figcaption class="image-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Michael_Schumacher_2006_Brazil_after_the_end_of_race.jpg">Morio / Wikimedia Commons</a> · CC BY-SA 3.0</figcaption>
+                            </figure>
+                            <div class="driver-card-content">
+                                <span class="driver-number">7 WORLD TITLES · GERMANY</span>
+                                <h3>Michael Schumacher</h3>
+                                <p>After back-to-back titles with Benetton, Schumacher won five consecutive championships with Ferrari from 2000 to 2004. His 91 Grand Prix wins stood as the record until Hamilton surpassed it.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="legacy section-pad" id="legacy">
+            <div class="container">
+                <div class="legacy-intro row align-items-end">
+                    <div class="col-lg-7">
+                        <span class="section-kicker">Records &amp; rivalries</span>
+                        <h2 class="section-title">The names<br>in the history books.</h2>
+                    </div>
+                    <div class="col-lg-5">
+                        <p class="section-copy mb-0">From the first race at Silverstone to modern title deciders, F1 history is written by world champions, legendary constructors and the circuits that test them.</p>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3 reveal">
+                        <article class="legacy-card">
+                            <div class="year">1950</div>
+                            <h3>The first champion</h3>
+                            <p>Giuseppe “Nino” Farina wins the inaugural Drivers' World Championship after the first season of the new series.</p>
+                        </article>
+                    </div>
+                    <div class="col-md-6 col-lg-3 reveal reveal-delay-1">
+                        <article class="legacy-card">
+                            <div class="year">1958</div>
+                            <h3>Constructors count</h3>
+                            <p>Vanwall becomes the first Constructors' World Champion, adding a team title to the drivers' championship.</p>
+                        </article>
+                    </div>
+                    <div class="col-md-6 col-lg-3 reveal reveal-delay-2">
+                        <article class="legacy-card">
+                            <div class="year">2008</div>
+                            <h3>A last-corner title</h3>
+                            <p>Lewis Hamilton clinches his first championship on the final lap of the season finale in Brazil.</p>
+                        </article>
+                    </div>
+                    <div class="col-md-6 col-lg-3 reveal reveal-delay-3">
+                        <article class="legacy-card">
+                            <div class="year">2025</div>
+                            <h3>A new champion</h3>
+                            <p>Lando Norris wins his first Drivers' title, while McLaren claims its 10th Constructors' Championship.</p>
+                        </article>
+                    </div>
+                </div>
+                <section class="championships reveal" aria-labelledby="championship-heading">
+                    <h3 id="championship-heading">The record book</h3>
+                    <div class="title-ledger">
+                        <div class="title-ledger-block">
+                            <strong>Most Drivers' titles</strong>
+                            <div class="title-years">Lewis Hamilton · 7<br>Michael Schumacher · 7<br>Juan Manuel Fangio · 5</div>
+                            <p>Hamilton and Schumacher share the all-time record. Fangio set the benchmark in the sport's early decades.</p>
+                        </div>
+                        <div class="title-ledger-block">
+                            <strong>Most Constructors' titles</strong>
+                            <div class="title-years">Ferrari · 16<br>McLaren · 10<br>Williams · 9<br>Mercedes · 8</div>
+                            <p>Ferrari leads the team standings; McLaren's 2025 title moved it to second all-time.</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="wins-section" aria-labelledby="wins-heading">
+                    <div class="section-heading reveal">
+                        <span class="section-kicker">Grand Prix moments</span>
+                        <h3 class="section-title" id="wins-heading">Wins that made history.</h3>
+                        <p class="section-copy">A few races that capture the drama, speed and unpredictability of Formula 1.</p>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-sm-6 col-lg-4 reveal">
+                            <article class="win-card">
+                                <div class="win-year">1950</div>
+                                <h4>Silverstone · The first race</h4>
+                                <p>Giuseppe Farina wins the first Formula One World Championship Grand Prix, launching a new era of motor racing.</p>
+                            </article>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 reveal reveal-delay-1">
+                            <article class="win-card">
+                                <div class="win-year">1976</div>
+                                <h4>Fuji · A title in the rain</h4>
+                                <p>James Hunt secures the championship by a single point after Niki Lauda retires from the rain-soaked finale.</p>
+                            </article>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 reveal reveal-delay-2">
+                            <article class="win-card">
+                                <div class="win-year">2008</div>
+                                <h4>São Paulo · The last lap</h4>
+                                <p>Hamilton passes Timo Glock in the final corners to secure his first world title by a single point.</p>
+                            </article>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 reveal">
+                            <article class="win-card">
+                                <div class="win-year">2012</div>
+                                <h4>Valencia · A wild finish</h4>
+                                <p>Fernando Alonso wins from 11th on the grid in a race of retirements and late drama.</p>
+                            </article>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 reveal reveal-delay-1">
+                            <article class="win-card">
+                                <div class="win-year">2021</div>
+                                <h4>Abu Dhabi · The title decider</h4>
+                                <p>Max Verstappen and Lewis Hamilton arrive level on points for the finale; Verstappen takes his first championship.</p>
+                            </article>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 reveal reveal-delay-2">
+                            <article class="win-card">
+                                <div class="win-year">2025</div>
+                                <h4>Abu Dhabi · A first crown</h4>
+                                <p>Lando Norris finishes third in the finale to clinch the Drivers' Championship by two points.</p>
+                            </article>
+                        </div>
+                    </div>
+                    <p class="record-note">All-time records and championship standings shown through the 2025 season.</p>
+                </section>
+                <div class="quote-panel reveal">
+                    <blockquote>Twenty-two drivers. One world championship. Every second counts.</blockquote>
+                    <cite>Formula One World Championship</cite>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container d-flex flex-column flex-sm-row justify-content-between gap-2">
+            <span>FORMULA ONE · THE WORLD AT FULL THROTTLE</span>
+            <a href="#home">Back to top ↑</a>
+        </div>
+    </footer>
+    <script src="node_modules\bootstrap\dist\js\bootstrap.bundle.min.js"></script>
+    <script>
+        const heroSlides = Array.from(document.querySelectorAll(".hero-slide"));
+        const heroCaption = document.querySelector("#hero-slide-caption");
+        const heroIndicators = Array.from(document.querySelectorAll(".hero-indicator"));
+        const heroCaptions = ["Ferrari · 2024 season", "Red Bull Racing · 2026 car"];
+        const hero = document.querySelector(".hero");
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        let currentHeroSlide = 0;
+        let heroTimer;
+
+        function showHeroSlide(index) {
+            currentHeroSlide = (index + heroSlides.length) % heroSlides.length;
+            heroSlides.forEach((slide, slideIndex) => {
+                slide.classList.toggle("is-active", slideIndex === currentHeroSlide);
+            });
+            heroIndicators.forEach((indicator, slideIndex) => {
+                indicator.classList.toggle("is-active", slideIndex === currentHeroSlide);
+                if (slideIndex === currentHeroSlide) {
+                    indicator.setAttribute("aria-current", "true");
+                } else {
+                    indicator.removeAttribute("aria-current");
+                }
+            });
+            heroCaption.textContent = heroCaptions[currentHeroSlide];
+        }
+
+        function stopHeroRotation() {
+            window.clearInterval(heroTimer);
+        }
+
+        function startHeroRotation() {
+            stopHeroRotation();
+            if (!reducedMotion.matches) {
+                heroTimer = window.setInterval(() => showHeroSlide(currentHeroSlide + 1), 6000);
+            }
+        }
+
+        heroIndicators.forEach((indicator, index) => {
+            indicator.addEventListener("click", () => {
+                showHeroSlide(index);
+                startHeroRotation();
+            });
+        });
+        hero.addEventListener("mouseenter", stopHeroRotation);
+        hero.addEventListener("mouseleave", startHeroRotation);
+        hero.addEventListener("focusin", stopHeroRotation);
+        hero.addEventListener("focusout", startHeroRotation);
+        reducedMotion.addEventListener("change", startHeroRotation);
+        startHeroRotation();
+    </script>
+</body>
+
+</html>
