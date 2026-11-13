@@ -1,5 +1,8 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-    base: "./"
+    base: "/f1_trial/",
+    server: {
+        port: 8080
+    }
 });
